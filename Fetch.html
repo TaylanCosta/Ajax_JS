@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta de CEP (Fetch)</title>
+    <style>
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        #demo {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+            width: 400px;
+            max-width: 90%;
+            text-align: center;
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 25px;
+        }
+
+        input[type="text"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1em;
+        }
+
+        button {
+            background-color: #28a745; 
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #1e7e34;
+        }
+    </style>
+</head>
+<body>
+    <div id="demo">
+        <h1>Consulta de CEP (Fetch)</h1>
+        <input type="text" name="cep" id="cep" placeholder="Digite seu CEP">
+        <button type="button" onclick="loadCepFetch()">Pesquisar CEP</button>
+        <br>
+        <input type="text" id="logradouro" placeholder="Logradouro" readonly>
+        <br>
+        <input type="text" id="complemento" placeholder="Complemento" readonly>
+        <br>
+        <input type="text" id="bairro" placeholder="Bairro" readonly>
+        <br>
+        <input type="text" id="localidade" placeholder="Cidade" readonly>
+        <br>
+        <input type="text" id="uf" placeholder="UF" readonly>
+    </div>
+
+    <script>
+        function loadCepFetch() {
+            const cep = document.getElementById("cep").value.replace(/\D/g, '');
+
+            if (!cep) {
+                alert("Por favor, digite um CEP.");
+                return;
+            }
+
+            fetch(`https://viacep.com.br/ws/${cep}/json`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.erro) {
+                        alert("CEP não encontrado.");
+                        document.getElementById("logradouro").value = "";
+                        document.getElementById("complemento").value = "";
+                        document.getElementById("bairro").value = "";
+                        document.getElementById("localidade").value = "";
+                        document.getElementById("uf").value = "";
+                    } else {
+                        document.getElementById("logradouro").value = data.logradouro || "";
+                        document.getElementById("complemento").value = data.complemento || "";
+                        document.getElementById("bairro").value = data.bairro || "";
+                        document.getElementById("localidade").value = data.localidade || "";
+                        document.getElementById("uf").value = data.uf || "";
+                    }
+                })
+                .catch(error => {
+                    console.error('Houve um erro:', error);
+                    alert(`Ocorreu um erro: ${error.message}`);
+                });
+        }
+    </script>
+</body>
+</html>
