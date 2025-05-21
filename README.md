@@ -49,6 +49,6 @@ Este repositório contém uma pesquisa comparativa e implementações do uso de 
 
 ## Códigos Implementados
 
-* [ajax\_fetch.html](ajax\_fetch.html) - Implementação usando.
+* [ajax\_fetch.html](Fetch.html) - Implementação usando.
 * [ajax\_promises.html](ajax\_promises.html) - Implementação usando.
 * [ajax\_async\_await.html](ajax\_async\_await.html) - Implementação usando.
